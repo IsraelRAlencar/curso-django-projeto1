@@ -9,7 +9,7 @@ class RecipeViewsTest(TestCase):
         self.assertIs(view.func, views.home)
 
     def teste_recipe_category_view_function_is_correct(self):
-        view = resolve(reverse('recipes:category', kwargs={'category_id': 1}))
+        view = resolve(reverse('recipes:category', kwargs={'category_id': 1000}))  # noqa: E501
         self.assertIs(view.func, views.category)
 
     def teste_recipe_detail_view_function_is_correct(self):
@@ -30,3 +30,15 @@ class RecipeViewsTest(TestCase):
             '<h1>No recipes found here.</h1>',
             response.content.decode('utf-8')
             )
+
+    def test_recipe_category_view_returns_404_if_no_recipes_found(self):
+        response = self.client.get(
+            reverse('recipes:category', kwargs={'category_id': 1000})
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_recipe_detail_view_returns_404_if_no_recipes_found(self):
+        response = self.client.get(
+            reverse('recipes:recipe', kwargs={'id': 1000})
+        )
+        self.assertEqual(response.status_code, 404)
