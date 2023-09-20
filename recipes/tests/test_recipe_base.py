@@ -24,7 +24,7 @@ class RecipeTestBase(TestCase):
             password=password,
             email=email
         )
-    
+
     def make_recipe(
             self,
             category_data=None,

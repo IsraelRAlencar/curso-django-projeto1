@@ -27,7 +27,7 @@ class RecipeViewsTest(RecipeTestBase):
     def teste_recipe_home_template_loads_recipes(self):
         # This test needs a recipe
         self.make_recipe()
-        
+
         response = self.client.get(reverse('recipes:home'))
         content = response.content.decode('utf-8')
         response_context_recipes = response.context['recipes']
