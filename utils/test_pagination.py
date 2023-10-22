@@ -1,8 +1,9 @@
-from unittest import TestCase
 from utils.pagination import make_pagination_range
+from recipes.tests.test_recipe_base import RecipeTestBase
+from django.urls import reverse
 
 
-class PaginationTest(TestCase):
+class PaginationTest(RecipeTestBase):
     def test_make_pagination_range_returns_a_pagination_range(self):
         pagination = make_pagination_range(
             page_range=list(range(1, 21)),
@@ -94,3 +95,12 @@ class PaginationTest(TestCase):
         )['pagination']
 
         self.assertEqual([17, 18, 19, 20], pagination)
+
+    def test_number_of_recipes_shown(self):
+        for i in range(1, 11):
+            self.make_recipe(slug=f'recipe-{i}', author_data={'username': f'user{i}'}, is_published=True)  # noqa
+
+        response = self.client.get(reverse('recipes:home'))
+        reponse_context_recipe = response.context['recipes']
+
+        self.assertEqual(len(reponse_context_recipe), 9)
